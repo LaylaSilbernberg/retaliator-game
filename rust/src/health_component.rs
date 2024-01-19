@@ -3,7 +3,7 @@ use godot::prelude::*;
 
 #[derive(GodotClass)]
 #[class(base=Resource)]
-struct HealthComponent {
+pub struct HealthComponent {
     #[export]
     health: i32,
     #[base]

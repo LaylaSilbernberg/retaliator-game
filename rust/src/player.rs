@@ -3,9 +3,10 @@ use godot::prelude::*;
 
 #[derive(GodotClass)]
 #[class(base=CharacterBody3d)]
-struct Prayer {
+pub struct Prayer {
     #[export]
     health_component: HealthComponent,
+    movement_component: MovementComponent,
     #[base]
     base: Base<CharacterBody3d>,
 }
