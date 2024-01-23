@@ -6,9 +6,11 @@ use crate::movement_component::MovementComponent;
 
 #[derive(GodotClass)]
 #[class(base=CharacterBody3D)]
-pub struct Prayer {
-    health_component: HealthComponent,
-    movement_component: MovementComponent,
+pub struct Player {
+    #[export]
+    health_component: Gd<HealthComponent>,
+    #[export]
+    movement_component: Gd<MovementComponent>,
     #[base]
     base: Base<CharacterBody3D>,
 }

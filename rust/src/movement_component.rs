@@ -1,12 +1,18 @@
-use godot::engine::Node3D;
-use godot::obj::WithBaseField;
+use godot::engine::{input, Node3D};
 use godot::prelude::*;
 
 #[derive(GodotClass)]
-#[class(base = Node3D, init)]
+#[class(tool, init, base = Node3D)]
 pub struct MovementComponent {
     #[export]
-    speed: f64,
+    speed: real,
+    #[export]
+    #[init(default = Vector3 {
+        x: 0.0,
+        y: 0.0,
+        z: 0.0,
+    })]
+    velocity: Vector3,
     #[base]
     base: Base<Node3D>,
 }
@@ -19,12 +25,7 @@ impl MovementComponent {
             y: 0.0,
             z: 0.0,
         };
-        let mut velocity: Vector3 = Vector3 {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0,
-        };
-        let global_transform = self.to_gd().get_global_transform().basis;
+        let global_transform = Self::to_gd(self).get_global_transform().basis;
         let input: Gd<Input> = Input::singleton();
         if input.is_action_pressed("move_forward".into()) {
             input_dir += -global_transform.col_c();
@@ -38,6 +39,12 @@ impl MovementComponent {
         if input.is_action_pressed("strage_right".into()) {
             input_dir += global_transform.col_a();
         }
-        input_dir.normalized()
+        input_dir
+    }
+}
+#[godot_api]
+impl INode3D for MovementComponent {
+    fn ready(&mut self) {
+        Input::singleton().set_mouse_mode(input::MouseMode::MOUSE_MODE_CAPTURED)
     }
 }
