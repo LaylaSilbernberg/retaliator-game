@@ -1,5 +1,4 @@
 use godot::engine::{EditorPlugin, IEditorPlugin};
-use godot::obj::WithBaseField;
 use godot::prelude::*;
 
 #[derive(GodotClass)]
@@ -10,12 +9,20 @@ pub struct GlobalState {
 }
 
 #[godot_api]
+impl GlobalState {
+    const PLAYER_VARS: &'static str = "PlayerVariables";
+}
+
+#[godot_api]
 impl IEditorPlugin for GlobalState {
     fn enter_tree(&mut self) {
-        Self::to_gd(self)
-            .add_autoload_singleton("player_variables".into(), "./player_variables.rs".into())
+        self.base_mut().add_autoload_singleton(
+            GlobalState::PLAYER_VARS.into(),
+            "/root/player_variables".into(),
+        )
     }
     fn exit_tree(&mut self) {
-        Self::to_gd(self).remove_autoload_singleton("player_variables".into())
+        self.base_mut()
+            .remove_autoload_singleton(GlobalState::PLAYER_VARS.into())
     }
 }

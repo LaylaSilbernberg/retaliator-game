@@ -2,11 +2,10 @@ use godot::prelude::*;
 
 mod global_state;
 mod health_component;
-mod movement_component;
 mod player;
 mod player_variables;
 
-struct MyExtension;
+struct Retaliator;
 
 #[gdextension]
-unsafe impl ExtensionLibrary for MyExtension {}
+unsafe impl ExtensionLibrary for Retaliator {}
