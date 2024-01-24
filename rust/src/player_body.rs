@@ -1,13 +1,19 @@
+use core::f32;
+
 use godot::engine::input::MouseMode;
-use godot::engine::{CharacterBody3D, ICharacterBody3D};
+use godot::engine::utilities::{clampf, deg_to_rad};
+use godot::engine::{CharacterBody3D, ICharacterBody3D, InputEvent, InputEventMouseMotion};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 
+use crate::player_head::PlayerHead;
 use crate::player_variables::PlayerVariables;
 
 #[derive(GodotClass)]
 #[class(init, base=CharacterBody3D)]
 pub struct PlayerBody {
+    #[export]
+    head: Option<Gd<PlayerHead>>,
     #[export]
     speed: real,
     #[export]
@@ -57,10 +63,34 @@ impl ICharacterBody3D for PlayerBody {
         self.set_gravity(player_vars.bind().get_gravity());
     }
 
+    fn unhandled_input(&mut self, event: Gd<InputEvent>) {
+        if let Ok(event_motion) = event.try_cast::<InputEventMouseMotion>() {
+            let mut head = self.get_head().expect("Head must be initialised");
+            let mut camera = head
+                .bind_mut()
+                .get_camera()
+                .expect("Camera must be initialised");
+            let sensitivity = self
+                .base_mut()
+                .get_node_as::<PlayerVariables>("PlayerVariables")
+                .bind()
+                .get_mouse_sensitivity();
+            head.rotate_y(-event_motion.get_relative().x * sensitivity);
+            camera.rotate_x(-event_motion.get_relative().y * sensitivity);
+            camera.get_rotation().x = clampf(
+                camera.get_rotation().x as f64,
+                deg_to_rad(-40.0),
+                deg_to_rad(60.0),
+            ) as f32;
+        }
+    }
+
     fn physics_process(&mut self, delta: f64) {
         self.velocity.y += self.get_gravity() * delta as f32;
+        let mut head = self.get_head().expect("Head must be initialised");
+        let direction = head.bind_mut().get_head_transform() * self.get_input();
 
-        let desired_velocity = self.get_input() * self.get_speed();
+        let desired_velocity = direction * self.get_speed();
 
         self.velocity.x = desired_velocity.x;
         self.velocity.z = desired_velocity.z;

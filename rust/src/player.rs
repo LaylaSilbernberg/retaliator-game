@@ -10,13 +10,16 @@ pub struct Player {
     #[export]
     player_body: Option<Gd<PlayerBody>>,
     #[export]
-    health_component: Gd<HealthComponent>,
+    health_component: Option<Gd<HealthComponent>>,
     #[base]
     base: Base<Node3D>,
 }
 #[godot_api]
 impl INode3D for Player {
     fn ready(&mut self) {
-        self.health_component.bind_mut().initialize_health();
+        let mut health: Gd<HealthComponent> = self
+            .get_health_component()
+            .expect("HealthComponent needs to be defined.");
+        health.bind_mut().initialize_health();
     }
 }
