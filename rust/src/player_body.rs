@@ -88,8 +88,7 @@ impl ICharacterBody3D for PlayerBody {
     fn physics_process(&mut self, delta: f64) {
         self.velocity.y += self.get_gravity() * delta as f32;
         let mut head = self.get_head().expect("Head must be initialised");
-        let direction = head.bind_mut().get_head_transform() * self.get_input();
-
+        let direction = head.bind_mut().get_head_transform_basis() * self.get_input();
         let desired_velocity = direction * self.get_speed();
 
         self.velocity.x = desired_velocity.x;

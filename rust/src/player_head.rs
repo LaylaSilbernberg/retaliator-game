@@ -13,7 +13,7 @@ pub struct PlayerHead {
 #[godot_api]
 impl PlayerHead {
     #[func]
-    pub fn get_head_transform(&mut self) -> Basis {
+    pub fn get_head_transform_basis(&mut self) -> Basis {
         self.base_mut().get_transform().basis
     }
 }
