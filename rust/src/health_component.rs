@@ -11,3 +11,10 @@ pub struct HealthComponent {
     #[base]
     base: Base<Resource>,
 }
+#[godot_api]
+impl HealthComponent {
+    #[func]
+    pub fn initialize_health(&mut self) {
+        self.health = self.max_health;
+    }
+}

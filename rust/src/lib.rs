@@ -3,6 +3,7 @@ use godot::prelude::*;
 mod global_state;
 mod health_component;
 mod player;
+mod player_body;
 mod player_variables;
 
 struct Retaliator;

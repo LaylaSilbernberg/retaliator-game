@@ -1,11 +1,11 @@
-use godot::engine::Node3D;
+use godot::engine::Node;
 use godot::prelude::*;
 
 #[derive(GodotClass)]
-#[class(tool, init, base=Node3D)]
+#[class(tool, init, base=Node)]
 pub struct PlayerVariables {
     #[base]
-    base: Base<Node3D>,
+    base: Base<Node>,
     #[export]
     #[var(get, set)]
     #[init(default = -30.0)]
