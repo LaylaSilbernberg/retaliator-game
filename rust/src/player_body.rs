@@ -28,33 +28,6 @@ pub struct PlayerBody {
     base: Base<CharacterBody3D>,
 }
 #[godot_api]
-impl PlayerBody {
-    #[func]
-    fn get_input(&mut self) -> Vector3 {
-        let mut input_dir: Vector3 = Vector3 {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0,
-        };
-        let global_transform = self.base_mut().get_global_transform().basis;
-        let input: Gd<Input> = Input::singleton();
-
-        if input.is_action_pressed("move_forward".into()) {
-            input_dir += -global_transform.col_c();
-        }
-        if input.is_action_pressed("move_backward".into()) {
-            input_dir += global_transform.col_c();
-        }
-        if input.is_action_pressed("strafe_left".into()) {
-            input_dir += -global_transform.col_a();
-        }
-        if input.is_action_pressed("strafe_right".into()) {
-            input_dir += global_transform.col_a();
-        }
-        input_dir
-    }
-}
-#[godot_api]
 impl ICharacterBody3D for PlayerBody {
     fn ready(&mut self) {
         Input::singleton().set_mouse_mode(MouseMode::CAPTURED);
@@ -78,13 +51,22 @@ impl ICharacterBody3D for PlayerBody {
     }
 
     fn physics_process(&mut self, delta: f64) {
-        self.velocity.y += self.get_gravity() * delta as f32;
+        let input_dir = Input::singleton().get_vector(
+            "strafe_left".into(),
+            "strafe_right".into(),
+            "move_forward".into(),
+            "move_back".into(),
+        );
         let mut head = self.get_head().expect("Head must be initialised");
-        let direction = head.bind_mut().get_head_transform_basis() * self.get_input();
-        let desired_velocity = direction * self.get_speed();
+        let direction = head.bind_mut().get_head_transform_basis()
+            * Vector3 {
+                x: input_dir.x,
+                y: input_dir.y,
+                z: 0.0,
+            };
 
-        self.velocity.x = desired_velocity.x;
-        self.velocity.z = desired_velocity.z;
+        self.velocity.x = direction.x * self.get_speed();
+        self.velocity.z = direction.z * self.get_speed();
         self.base_mut().move_and_slide();
     }
 }
