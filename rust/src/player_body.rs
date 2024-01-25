@@ -48,7 +48,7 @@ impl PlayerBody {
         if input.is_action_pressed("strafe_left".into()) {
             input_dir += -global_transform.col_a();
         }
-        if input.is_action_pressed("strage_right".into()) {
+        if input.is_action_pressed("strafe_right".into()) {
             input_dir += global_transform.col_a();
         }
         input_dir
