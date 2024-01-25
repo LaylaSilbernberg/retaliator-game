@@ -51,6 +51,10 @@ impl ICharacterBody3D for PlayerBody {
     }
 
     fn physics_process(&mut self, delta: f64) {
+        if !self.base_mut().is_on_floor() {
+            self.velocity.y -= self.get_gravity() * delta as f32
+        }
+
         let input_dir = Input::singleton().get_vector(
             "strafe_left".into(),
             "strafe_right".into(),
