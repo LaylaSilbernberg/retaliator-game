@@ -2,33 +2,25 @@ use core::f32;
 
 use godot::engine::input::MouseMode;
 use godot::engine::utilities::{clampf, deg_to_rad};
-use godot::engine::{CharacterBody3D, Engine, ICharacterBody3D, InputEvent, InputEventMouseMotion};
+use godot::engine::{CharacterBody3D, ICharacterBody3D, InputEvent, InputEventMouseMotion};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 
 use crate::player_head::PlayerHead;
-use crate::player_variables::PlayerVariables;
 
 #[derive(GodotClass)]
 #[class(init, base=CharacterBody3D)]
 pub struct PlayerBody {
     #[export]
+    #[init(default = 0.002)]
+    sensitivity: real,
+    #[export]
     head: Option<Gd<PlayerHead>>,
     #[export]
-    #[init(default = Engine::singleton()
-        .get_singleton("PlayerVariables".into())
-        .expect("Player Variables not registered")
-        .cast::<PlayerVariables>()
-        .bind()
-        .get_max_speed())]
+    #[init(default = 8.0)]
     speed: real,
     #[export]
-    #[init(default = Engine::singleton()
-        .get_singleton("PlayerVariables".into())
-        .expect("Player Variables not registered")
-        .cast::<PlayerVariables>()
-        .bind()
-        .get_gravity())]
+    #[init(default = -30.0)]
     gravity: real,
     #[var]
     velocity: Vector3,
@@ -75,14 +67,8 @@ impl ICharacterBody3D for PlayerBody {
                 .bind_mut()
                 .get_camera()
                 .expect("Camera must be initialised");
-            let sensitivity = Engine::singleton()
-                .get_singleton("PlayerVariables".into())
-                .expect("Player Variables not loaded")
-                .cast::<PlayerVariables>()
-                .bind_mut()
-                .get_mouse_sensitivity();
-            head.rotate_y(-event_motion.get_relative().x * sensitivity);
-            camera.rotate_x(-event_motion.get_relative().y * sensitivity);
+            head.rotate_y(-event_motion.get_relative().x * self.sensitivity);
+            camera.rotate_x(-event_motion.get_relative().y * self.sensitivity);
             camera.get_rotation().x = clampf(
                 camera.get_rotation().x as f64,
                 deg_to_rad(-40.0),
