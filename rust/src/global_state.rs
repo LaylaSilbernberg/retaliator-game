@@ -1,5 +1,7 @@
-use godot::engine::{EditorPlugin, IEditorPlugin};
+use godot::engine::{EditorPlugin, Engine, IEditorPlugin};
 use godot::prelude::*;
+
+use crate::player_variables::PlayerVariables;
 
 #[derive(GodotClass)]
 #[class(tool, init, editor_plugin, base=EditorPlugin)]
@@ -16,13 +18,12 @@ impl GlobalState {
 #[godot_api]
 impl IEditorPlugin for GlobalState {
     fn enter_tree(&mut self) {
-        self.base_mut().add_autoload_singleton(
+        Engine::singleton().register_singleton(
             GlobalState::PLAYER_VARS.into(),
-            "/root/player_variables".into(),
+            PlayerVariables::new_alloc().upcast::<Object>(),
         )
     }
     fn exit_tree(&mut self) {
-        self.base_mut()
-            .remove_autoload_singleton(GlobalState::PLAYER_VARS.into())
+        Engine::singleton().unregister_singleton(GlobalState::PLAYER_VARS.into())
     }
 }

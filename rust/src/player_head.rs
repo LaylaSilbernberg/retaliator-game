@@ -5,7 +5,7 @@ use godot::prelude::*;
 #[derive(GodotClass)]
 #[class(init, base = Node3D)]
 pub struct PlayerHead {
-    #[var]
+    #[export]
     camera: Option<Gd<Camera3D>>,
     #[base]
     base: Base<Node3D>,

@@ -2,7 +2,7 @@ use core::f32;
 
 use godot::engine::input::MouseMode;
 use godot::engine::utilities::{clampf, deg_to_rad};
-use godot::engine::{CharacterBody3D, ICharacterBody3D, InputEvent, InputEventMouseMotion};
+use godot::engine::{CharacterBody3D, Engine, ICharacterBody3D, InputEvent, InputEventMouseMotion};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 
@@ -15,8 +15,20 @@ pub struct PlayerBody {
     #[export]
     head: Option<Gd<PlayerHead>>,
     #[export]
+    #[init(default = Engine::singleton()
+        .get_singleton("PlayerVariables".into())
+        .expect("Player Variables not registered")
+        .cast::<PlayerVariables>()
+        .bind()
+        .get_max_speed())]
     speed: real,
     #[export]
+    #[init(default = Engine::singleton()
+        .get_singleton("PlayerVariables".into())
+        .expect("Player Variables not registered")
+        .cast::<PlayerVariables>()
+        .bind()
+        .get_gravity())]
     gravity: real,
     #[var]
     velocity: Vector3,
@@ -54,13 +66,6 @@ impl PlayerBody {
 impl ICharacterBody3D for PlayerBody {
     fn ready(&mut self) {
         Input::singleton().set_mouse_mode(MouseMode::CAPTURED);
-
-        let player_vars = self
-            .base()
-            .get_node_as::<PlayerVariables>("PlayerVariables");
-
-        self.set_speed(player_vars.bind().get_max_speed());
-        self.set_gravity(player_vars.bind().get_gravity());
     }
 
     fn unhandled_input(&mut self, event: Gd<InputEvent>) {
@@ -70,10 +75,11 @@ impl ICharacterBody3D for PlayerBody {
                 .bind_mut()
                 .get_camera()
                 .expect("Camera must be initialised");
-            let sensitivity = self
-                .base_mut()
-                .get_node_as::<PlayerVariables>("PlayerVariables")
-                .bind()
+            let sensitivity = Engine::singleton()
+                .get_singleton("PlayerVariables".into())
+                .expect("Player Variables not loaded")
+                .cast::<PlayerVariables>()
+                .bind_mut()
                 .get_mouse_sensitivity();
             head.rotate_y(-event_motion.get_relative().x * sensitivity);
             camera.rotate_x(-event_motion.get_relative().y * sensitivity);

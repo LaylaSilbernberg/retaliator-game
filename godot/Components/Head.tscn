@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://c0p8yj74xdccg"]
+
+[node name="Head" type="PlayerHead" node_paths=PackedStringArray("camera")]
+camera = NodePath("")
