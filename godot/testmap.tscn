@@ -1,10 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://duj3i1ytfigxw"]
+[gd_scene load_steps=3 format=3 uid="uid://bgfmayg1r42vk"]
 
 [ext_resource type="PackedScene" uid="uid://bx4n8f5p5fgp8" path="res://maps/testmap.glb" id="1_vncbq"]
-[ext_resource type="PackedScene" uid="uid://nca1mu1fu74j" path="res://Components/Player.tscn" id="2_fjyiw"]
+[ext_resource type="PackedScene" uid="uid://nca1mu1fu74j" path="res://Components/Player.tscn" id="2_ihvfd"]
 
 [node name="testmap" instance=ExtResource("1_vncbq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 1)
 
-[node name="Player" parent="Plane" index="0" instance=ExtResource("2_fjyiw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.28483, 0.128891, 5.73872)
+[node name="Player" parent="." index="1" instance=ExtResource("2_ihvfd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 4)

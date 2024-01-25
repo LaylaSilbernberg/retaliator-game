@@ -22,8 +22,6 @@ pub struct PlayerBody {
     #[export]
     #[init(default = -30.0)]
     gravity: real,
-    #[var]
-    velocity: Vector3,
     #[base]
     base: Base<CharacterBody3D>,
 }
@@ -51,10 +49,10 @@ impl ICharacterBody3D for PlayerBody {
     }
 
     fn physics_process(&mut self, delta: f64) {
+        let mut player_velocity = Vector3::ZERO;
         if !self.base_mut().is_on_floor() {
-            self.velocity.y -= self.get_gravity() * delta as f32
+            player_velocity.y += self.get_gravity() * (delta as f32);
         }
-
         let input_dir = Input::singleton().get_vector(
             "strafe_left".into(),
             "strafe_right".into(),
@@ -65,12 +63,12 @@ impl ICharacterBody3D for PlayerBody {
         let direction = head.bind_mut().get_head_transform_basis()
             * Vector3 {
                 x: input_dir.x,
-                y: input_dir.y,
-                z: 0.0,
+                y: 0.0,
+                z: input_dir.y,
             };
-
-        self.velocity.x = direction.x * self.get_speed();
-        self.velocity.z = direction.z * self.get_speed();
+        player_velocity.x = direction.x * self.get_speed();
+        player_velocity.z = direction.z * self.get_speed();
+        self.base_mut().set_velocity(player_velocity);
         self.base_mut().move_and_slide();
     }
 }
