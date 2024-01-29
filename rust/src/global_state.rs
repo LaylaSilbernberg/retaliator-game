@@ -4,7 +4,7 @@ use godot::prelude::*;
 use crate::player_variables::PlayerVariables;
 
 #[derive(GodotClass)]
-#[class(tool, init, editor_plugin, base=EditorPlugin)]
+#[class(tool, init, editor_plugin, base = EditorPlugin)]
 pub struct GlobalState {
     #[base]
     base: Base<EditorPlugin>,

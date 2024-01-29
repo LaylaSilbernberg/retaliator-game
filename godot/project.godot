@@ -15,6 +15,10 @@ run/main_scene="res://testmap.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/qodot/plugin.cfg")
+
 [input]
 
 move_forward={
