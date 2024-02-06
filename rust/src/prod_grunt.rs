@@ -21,18 +21,9 @@ pub struct ProdGrunt {
     #[export]
     nav_agent: Option<Gd<NavigationAgent3D>>,
 }
-// #[godot_api]
-// impl ProdGrunt {
-//     fn move_to_target(&mut self) {}
-// }
 #[godot_api]
-impl ICharacterBody3D for ProdGrunt {
-    fn ready(&mut self) {
-        if let Some(mut sprite) = self.get_sprite() {
-            sprite.set_animation("default".into());
-        }
-    }
-    fn process(&mut self, _delta: f64) {
+impl ProdGrunt {
+    fn move_to_target(&mut self) {
         self.base_mut().set_velocity(Vector3::ZERO);
         if let Some(_sprite) = self.get_sprite() {
             if let Some(player) = self.get_player() {
@@ -49,10 +40,20 @@ impl ICharacterBody3D for ProdGrunt {
                         y: y_position,
                         z: player.get_global_position().z,
                     });
-                    dbg!(self.base().get_velocity());
                     self.base_mut().move_and_slide();
                 }
             }
         }
+    }
+}
+#[godot_api]
+impl ICharacterBody3D for ProdGrunt {
+    fn ready(&mut self) {
+        if let Some(mut sprite) = self.get_sprite() {
+            sprite.set_animation("default".into());
+        }
+    }
+    fn process(&mut self, _delta: f64) {
+        self.move_to_target();
     }
 }
