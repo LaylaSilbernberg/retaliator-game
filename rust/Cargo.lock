@@ -49,7 +49,7 @@ checksum = "8e4afd9ad95555081e109fe1d21f2a30c691b5f0919c67dfa690a2e1eb6bd51c"
 [[package]]
 name = "godot"
 version = "0.1.0"
-source = "git+https://github.com/godot-rust/gdext?branch=master#69180967118c9cb991c8e3cdd2e4f07b0c612f68"
+source = "git+https://github.com/godot-rust/gdext?branch=master#c006a09c0fc1d748e5de6e244a3c0694945dd96b"
 dependencies = [
  "godot-core",
  "godot-macros",
@@ -58,7 +58,7 @@ dependencies = [
 [[package]]
 name = "godot-bindings"
 version = "0.1.0"
-source = "git+https://github.com/godot-rust/gdext?branch=master#69180967118c9cb991c8e3cdd2e4f07b0c612f68"
+source = "git+https://github.com/godot-rust/gdext?branch=master#c006a09c0fc1d748e5de6e244a3c0694945dd96b"
 dependencies = [
  "godot4-prebuilt",
 ]
@@ -66,12 +66,12 @@ dependencies = [
 [[package]]
 name = "godot-cell"
 version = "0.1.0"
-source = "git+https://github.com/godot-rust/gdext?branch=master#69180967118c9cb991c8e3cdd2e4f07b0c612f68"
+source = "git+https://github.com/godot-rust/gdext?branch=master#c006a09c0fc1d748e5de6e244a3c0694945dd96b"
 
 [[package]]
 name = "godot-codegen"
 version = "0.1.0"
-source = "git+https://github.com/godot-rust/gdext?branch=master#69180967118c9cb991c8e3cdd2e4f07b0c612f68"
+source = "git+https://github.com/godot-rust/gdext?branch=master#c006a09c0fc1d748e5de6e244a3c0694945dd96b"
 dependencies = [
  "godot-bindings",
  "godot-fmt",
@@ -85,7 +85,7 @@ dependencies = [
 [[package]]
 name = "godot-core"
 version = "0.1.0"
-source = "git+https://github.com/godot-rust/gdext?branch=master#69180967118c9cb991c8e3cdd2e4f07b0c612f68"
+source = "git+https://github.com/godot-rust/gdext?branch=master#c006a09c0fc1d748e5de6e244a3c0694945dd96b"
 dependencies = [
  "glam",
  "godot-bindings",
@@ -97,7 +97,7 @@ dependencies = [
 [[package]]
 name = "godot-ffi"
 version = "0.1.0"
-source = "git+https://github.com/godot-rust/gdext?branch=master#69180967118c9cb991c8e3cdd2e4f07b0c612f68"
+source = "git+https://github.com/godot-rust/gdext?branch=master#c006a09c0fc1d748e5de6e244a3c0694945dd96b"
 dependencies = [
  "gensym",
  "godot-bindings",
@@ -108,7 +108,7 @@ dependencies = [
 [[package]]
 name = "godot-fmt"
 version = "0.1.0"
-source = "git+https://github.com/godot-rust/gdext?branch=master#69180967118c9cb991c8e3cdd2e4f07b0c612f68"
+source = "git+https://github.com/godot-rust/gdext?branch=master#c006a09c0fc1d748e5de6e244a3c0694945dd96b"
 dependencies = [
  "proc-macro2",
 ]
@@ -116,7 +116,7 @@ dependencies = [
 [[package]]
 name = "godot-macros"
 version = "0.1.0"
-source = "git+https://github.com/godot-rust/gdext?branch=master#69180967118c9cb991c8e3cdd2e4f07b0c612f68"
+source = "git+https://github.com/godot-rust/gdext?branch=master#c006a09c0fc1d748e5de6e244a3c0694945dd96b"
 dependencies = [
  "godot-bindings",
  "proc-macro2",
@@ -137,9 +137,9 @@ checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
 
 [[package]]
 name = "libc"
-version = "0.2.152"
+version = "0.2.153"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "13e3bf6590cbc649f4d1a3eefc9d5d6eb746f5200ffb04e5e142700b8faa56e7"
+checksum = "9c198f91728a82281a64e1f4f9eeb25d82cb32a5de251c6bd1b5154d63a8e7bd"
 
 [[package]]
 name = "memchr"
@@ -149,18 +149,18 @@ checksum = "523dc4f511e55ab87b694dc30d0f820d60906ef06413f93d4d7a1385599cc149"
 
 [[package]]
 name = "nanoserde"
-version = "0.1.35"
+version = "0.1.37"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a983d0b19ed0fcd803c4f04f9b20d5e6dd17e06d44d98742a0985ac45dab1bc"
+checksum = "5de9cf844ab1e25a0353525bd74cb889843a6215fa4a0d156fd446f4857a1b99"
 dependencies = [
  "nanoserde-derive",
 ]
 
 [[package]]
 name = "nanoserde-derive"
-version = "0.1.21"
+version = "0.1.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4dc96541767a4279572fdcf9f95af9cc1c9b2a2254e7a079203c81e206a9059"
+checksum = "e943b2c21337b7e3ec6678500687cdc741b7639ad457f234693352075c082204"
 
 [[package]]
 name = "paste"
@@ -200,9 +200,9 @@ dependencies = [
 
 [[package]]
 name = "regex-automata"
-version = "0.4.4"
+version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3b7fa1134405e2ec9353fd416b17f8dacd46c473d7d3fd1cf202706a14eb792a"
+checksum = "5bb987efffd3c6d0d8f5f89510bb458559eab11e4f869acb20bf845e016259cd"
 dependencies = [
  "aho-corasick",
  "memchr",

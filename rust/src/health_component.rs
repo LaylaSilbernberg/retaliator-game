@@ -8,6 +8,5 @@ pub struct HealthComponent {
     health: i32,
     #[export]
     max_health: i32,
-    #[base]
     base: Base<Resource>,
 }

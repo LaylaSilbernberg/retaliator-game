@@ -4,7 +4,6 @@ use godot::prelude::*;
 #[derive(GodotClass)]
 #[class(tool, init, base=Node)]
 pub struct PlayerVariables {
-    #[base]
     base: Base<Node>,
     #[export]
     #[init(default = -30.0)]

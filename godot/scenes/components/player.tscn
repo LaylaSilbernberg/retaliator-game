@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://nca1mu1fu74j"]
+
+[ext_resource type="HealthComponent" uid="uid://d0hb7c2r0emyy" path="res://resources/player_health_component.tres" id="1_qjqpo"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e4rc8"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u0jho"]
+
+[node name="Player" type="Player" node_paths=PackedStringArray("head")]
+head = NodePath("PlayerHead")
+health_component = ExtResource("1_qjqpo")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="PlayerHead" type="PlayerHead" parent="." node_paths=PackedStringArray("camera")]
+camera = NodePath("Camera3D")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="PlayerHead"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.78485, -0.397767)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_e4rc8")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10491, 0)
+shape = SubResource("CapsuleShape3D_u0jho")

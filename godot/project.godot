@@ -15,6 +15,14 @@ run/main_scene="res://testmap.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+PlayerVars="*res://scenes/autoloads/player_variables.tscn"
+
+[editor]
+
+movie_writer/movie_file="/home/layla/Videos/GodotMovies/GodotMovies.avi"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/qodot/plugin.cfg")
@@ -48,5 +56,6 @@ strafe_right={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"

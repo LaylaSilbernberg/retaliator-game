@@ -7,7 +7,6 @@ use godot::prelude::*;
 pub struct PlayerHead {
     #[export]
     camera: Option<Gd<Camera3D>>,
-    #[base]
     base: Base<Node3D>,
 }
 #[godot_api]

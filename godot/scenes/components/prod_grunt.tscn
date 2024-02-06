@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://0xg3hkwot0qt"]
+
+[ext_resource type="Texture2D" uid="uid://njcuwemv67o3" path="res://sprites/hazmatzombie/hmzpa1.png" id="1_458uq"]
+[ext_resource type="Texture2D" uid="uid://b0q51h6hvins5" path="res://sprites/hazmatzombie/hmzpb1.png" id="2_nhca4"]
+[ext_resource type="Texture2D" uid="uid://cwmiun0nvnlhp" path="res://sprites/hazmatzombie/hmzpc1.png" id="3_u4nag"]
+[ext_resource type="Texture2D" uid="uid://bejpx8lccto85" path="res://sprites/hazmatzombie/hmzpd1.png" id="4_r3vbe"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_74k7a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_458uq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_nhca4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_u4nag")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_r3vbe")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ltb12"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sopib"]
+
+[node name="ProdGrunt" type="ProdGrunt" node_paths=PackedStringArray("sprite")]
+sprite = NodePath("AnimatedSprite3D")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.611722, 0)
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(3.8, 0, 0, 0, 4.885, 0, 0, 0, 2.746, 0, 0.788603, 0)
+flip_h = true
+billboard = 2
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_74k7a")
+autoplay = "default"
+frame = 3
+frame_progress = 1.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.239163, 0.434595, 0.314813)
+shape = SubResource("CapsuleShape3D_ltb12")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.191322, 1.15401, 0.354224)
+shape = SubResource("CapsuleShape3D_sopib")
