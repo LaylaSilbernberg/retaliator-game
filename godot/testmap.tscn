@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bgfmayg1r42vk"]
 
 [ext_resource type="PackedScene" path="res://maps/testmap.glb" id="1_vncbq"]
-[ext_resource type="PackedScene" uid="uid://nca1mu1fu74j" path="res://scenes/components/player.tscn" id="2_ihvfd"]
+[ext_resource type="PackedScene" uid="uid://nca1mu1fu74j" path="res://scenes/player/player.tscn" id="2_ihvfd"]
 
 [node name="testmap" instance=ExtResource("1_vncbq")]
 

@@ -5,6 +5,7 @@ use godot::engine::utilities::{clampf, deg_to_rad};
 use godot::engine::{CharacterBody3D, ICharacterBody3D, InputEvent, InputEventMouseMotion};
 use godot::obj::WithBaseField;
 
+use crate::health::Health;
 use crate::health_component::HealthComponent;
 use crate::player_head::PlayerHead;
 use crate::player_variables::PlayerVariables;
@@ -15,7 +16,7 @@ pub struct Player {
     #[export]
     head: Option<Gd<PlayerHead>>,
     #[export]
-    health_component: Option<Gd<HealthComponent>>,
+    health: Option<Gd<HealthComponent>>,
     base: Base<CharacterBody3D>,
 }
 #[godot_api]
@@ -75,5 +76,10 @@ impl ICharacterBody3D for Player {
             self.base_mut().set_velocity(player_velocity);
             self.base_mut().move_and_slide();
         }
+    }
+}
+impl Health for Player {
+    fn get_health_component(&self) -> Gd<HealthComponent> {
+        self.get_health().unwrap()
     }
 }

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://caw0rcvda6enq"]
+
+[node name="MuzzleFlash" type="MuzzleFlash" node_paths=PackedStringArray("timer")]
+timer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.005
+autostart = true

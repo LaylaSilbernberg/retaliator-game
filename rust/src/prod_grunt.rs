@@ -1,11 +1,15 @@
+use std::ops::DerefMut;
+
 use ::godot::engine::CharacterBody3D;
 use ::godot::prelude::*;
 use godot::{
-    engine::{AnimatedSprite3D, ICharacterBody3D, NavigationAgent3D},
+    engine::{AnimatedSprite3D, CollisionShape3D, ICharacterBody3D, NavigationAgent3D},
     obj::WithBaseField,
 };
 
-use crate::player::Player;
+use crate::{
+    damageable::Damageable, health::Health, health_component::HealthComponent, player::Player,
+};
 
 #[derive(GodotClass)]
 #[class(init, base = CharacterBody3D)]
@@ -20,6 +24,10 @@ pub struct ProdGrunt {
     sprite: Option<Gd<AnimatedSprite3D>>,
     #[export]
     nav_agent: Option<Gd<NavigationAgent3D>>,
+    #[export]
+    health: Option<Gd<HealthComponent>>,
+    #[export]
+    collision: Array<Gd<CollisionShape3D>>,
 }
 #[godot_api]
 impl ProdGrunt {
@@ -45,6 +53,21 @@ impl ProdGrunt {
             }
         }
     }
+    fn death(&mut self) {
+        self.base_mut().set_process(false);
+        self.base_mut().set_physics_process(false);
+        for mut shape in self.get_collision().iter_shared() {
+            shape.set_disabled(true);
+        }
+        if let Some(health) = self.get_health() {
+            if let Some(death_string) = health.bind().death() {
+                if let Some(mut sprite) = self.get_sprite() {
+                    sprite.set_animation(death_string);
+                    sprite.play();
+                }
+            }
+        }
+    }
 }
 #[godot_api]
 impl ICharacterBody3D for ProdGrunt {
@@ -55,5 +78,16 @@ impl ICharacterBody3D for ProdGrunt {
     }
     fn process(&mut self, _delta: f64) {
         self.move_to_target();
+        if let Some(health) = self.get_health() {
+            if health.bind().get_health() <= 0 {
+                self.death();
+            }
+        }
     }
 }
+impl Health for ProdGrunt {
+    fn get_health_component(&self) -> Gd<HealthComponent> {
+        self.get_health().unwrap()
+    }
+}
+impl Damageable for ProdGrunt {}
