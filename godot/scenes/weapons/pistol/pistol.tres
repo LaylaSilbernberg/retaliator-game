@@ -1,0 +1,35 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://2ldtwkyxynhm"]
+
+[ext_resource type="Texture2D" uid="uid://cq6a35wl7fpd4" path="res://sprites/blaster_pistol/BLPSA0.png" id="1_qojrj"]
+[ext_resource type="Texture2D" uid="uid://b8e3takkaouxy" path="res://sprites/blaster_pistol/BLPSE0.png" id="2_meyh5"]
+[ext_resource type="Texture2D" uid="uid://kv8qi5bq2ku3" path="res://sprites/blaster_pistol/BLPSD0.png" id="3_1bod4"]
+[ext_resource type="Texture2D" uid="uid://cs8u7r2o3myh6" path="res://sprites/blaster_pistol/BLPSC0.png" id="4_neqyc"]
+[ext_resource type="Texture2D" uid="uid://bjjgkho72jbh7" path="res://sprites/blaster_pistol/BLPSB0.png" id="5_3l8w0"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_qojrj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_meyh5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_1bod4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_neqyc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_3l8w0")
+}],
+"loop": true,
+"name": &"shoot",
+"speed": 10.0
+}]

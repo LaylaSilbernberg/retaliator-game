@@ -2,7 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://c5fpo0lj0kd4b" path="res://sprites/hazmatzombie/hmzpe1.png" id="1_7erxu"]
 [ext_resource type="Texture2D" uid="uid://njcuwemv67o3" path="res://sprites/hazmatzombie/hmzpa1.png" id="1_458uq"]
-[ext_resource type="HealthComponent" uid="uid://u6khl0123g7k" path="res://scenes/components/grunt_health.tres" id="1_ks7yl"]
 [ext_resource type="Texture2D" uid="uid://bg3satiluub2t" path="res://sprites/hazmatzombie/hmzpf1.png" id="2_lxyf1"]
 [ext_resource type="Texture2D" uid="uid://b0q51h6hvins5" path="res://sprites/hazmatzombie/hmzpb1.png" id="2_nhca4"]
 [ext_resource type="Texture2D" uid="uid://b7kt3gg2b5xlv" path="res://sprites/hazmatzombie/hmzph0.png" id="3_h4xy3"]
@@ -23,7 +22,11 @@
 [ext_resource type="Texture2D" uid="uid://bk8eig3i1xvul" path="res://sprites/hazmatzombie/hmzpu0.png" id="20_lqjb5"]
 [ext_resource type="Texture2D" uid="uid://dnx8i2m4o1jj7" path="res://sprites/hazmatzombie/hmzpg1.png" id="21_ubn22"]
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_74k7a"]
+[sub_resource type="HealthComponent" id="HealthComponent_yuw4f"]
+health = 30
+max_health = 30
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l3lhu"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -123,7 +126,7 @@ animations = [{
 
 [node name="ProdGrunt" type="ProdGrunt" node_paths=PackedStringArray("sprite", "collision") groups=["enemy"]]
 sprite = NodePath("AnimatedSprite3D")
-health = ExtResource("1_ks7yl")
+health = SubResource("HealthComponent_yuw4f")
 collision = [NodePath("CollisionShape3D"), NodePath("CollisionShape3D2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.611722, 0)
 
@@ -134,9 +137,8 @@ offset = Vector2(-25, -12)
 flip_h = true
 billboard = 2
 texture_filter = 0
-sprite_frames = SubResource("SpriteFrames_74k7a")
+sprite_frames = SubResource("SpriteFrames_l3lhu")
 autoplay = "default"
-frame_progress = 0.844026
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.239163, 0.434595, 0.314813)

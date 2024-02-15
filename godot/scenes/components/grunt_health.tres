@@ -1,5 +1,0 @@
-[gd_resource type="HealthComponent" format=3 uid="uid://u6khl0123g7k"]
-
-[resource]
-health = 20
-max_health = 20

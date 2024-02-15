@@ -1,4 +1,4 @@
-[gd_scene load_steps=96 format=3 uid="uid://duc3yxnfhilsy"]
+[gd_scene load_steps=97 format=3 uid="uid://duc3yxnfhilsy"]
 
 [ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_map.gd" id="1_akxtu"]
 [ext_resource type="Resource" uid="uid://c36hv0o6g0udo" path="res://addons/qodot/game_definitions/fgd/qodot_fgd.tres" id="2_xxmlk"]
@@ -376,6 +376,10 @@ points = PackedVector3Array(10.9254, 3.05224, -11.6418, 10.9254, 2.05224, -11.64
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_aiy6g"]
 points = PackedVector3Array(14.9254, 3.05224, -3.64179, 14.9254, 2.05224, -3.64179, 16.9254, 2.05224, -3.64179, 16.9254, 3.05224, -3.64179, 14.9254, 3.05224, -2.64179, 14.9254, 2.05224, -2.64179, 16.9254, 2.05224, -2.64179, 16.9254, 3.05224, -2.64179)
 
+[sub_resource type="HealthComponent" id="HealthComponent_yryoh"]
+health = 30
+max_health = 30
+
 [sub_resource type="HealthComponent" id="HealthComponent_ybg7s"]
 
 [node name="TestLevel" type="Node3D"]
@@ -646,6 +650,7 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -15.8961, 8.06172, -2.7
 [node name="ProdGrunt" parent="." node_paths=PackedStringArray("player", "nav_agent") instance=ExtResource("14_3q1ay")]
 player = NodePath("../Player")
 nav_agent = NodePath("NavigationAgent3D")
+health = SubResource("HealthComponent_yryoh")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.83663, 8.7111, -5.91792)
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="ProdGrunt"]
@@ -654,3 +659,10 @@ avoidance_enabled = true
 [node name="Player" parent="." instance=ExtResource("13_8w51m")]
 health = SubResource("HealthComponent_ybg7s")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.84954, 9.18003, -1.24304)
+
+[node name="ProdGrunt2" parent="." node_paths=PackedStringArray("player", "nav_agent") instance=ExtResource("14_3q1ay")]
+player = NodePath("../Player")
+nav_agent = NodePath("NavigationAgent3D")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.332, 8.711, -6.287)
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="ProdGrunt2"]

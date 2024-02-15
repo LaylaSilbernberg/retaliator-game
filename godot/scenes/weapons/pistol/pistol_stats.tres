@@ -1,0 +1,6 @@
+[gd_resource type="WeaponStatistics" format=3 uid="uid://b1p6pb7d3cmh0"]
+
+[resource]
+damage = 8
+ammo_pool = 144
+max_ammo = 150

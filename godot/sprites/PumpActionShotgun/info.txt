@@ -1,0 +1,7 @@
+Name: Pump-Action Shotgun
+Class: Level 3
+Type: Hitscan
+Palette: Doom
+Summon: PumpActionShotgun
+Ammotype: Shell
+AltFire: No

@@ -1,9 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://cmao4hs30t7dj"]
+[gd_scene load_steps=3 format=3 uid="uid://cmao4hs30t7dj"]
 
-[ext_resource type="SpriteFrames" uid="uid://2ldtwkyxynhm" path="res://scenes/weapons/pistol.tres" id="1_jtdpg"]
+[ext_resource type="WeaponStatistics" uid="uid://b1p6pb7d3cmh0" path="res://scenes/weapons/pistol/pistol_stats.tres" id="1_j71dc"]
+[ext_resource type="SpriteFrames" uid="uid://2ldtwkyxynhm" path="res://scenes/weapons/pistol/pistol.tres" id="1_nhluc"]
 
 [node name="Pistol" type="Gun" node_paths=PackedStringArray("gun_sprite", "gun_rays")]
-damage = 8
+stats = ExtResource("1_j71dc")
 gun_sprite = NodePath("CanvasLayer/Control/PistolSprite")
 gun_rays = [NodePath("RayCast3D")]
 
@@ -25,7 +26,10 @@ size_flags_vertical = 8
 position = Vector2(-237, 0)
 rotation = 3.14159
 scale = Vector2(2, 2)
-sprite_frames = ExtResource("1_jtdpg")
+sprite_frames = ExtResource("1_nhluc")
+animation = &"shoot"
+frame = 3
+frame_progress = 1.0
 centered = false
 flip_h = true
 flip_v = true

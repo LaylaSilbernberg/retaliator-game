@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://bgfmayg1r42vk"]
-
-[ext_resource type="PackedScene" path="res://maps/testmap.glb" id="1_vncbq"]
-[ext_resource type="PackedScene" uid="uid://nca1mu1fu74j" path="res://scenes/player/player.tscn" id="2_ihvfd"]
-
-[node name="testmap" instance=ExtResource("1_vncbq")]
-
-[node name="Player" parent="." index="1" instance=ExtResource("2_ihvfd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 4)

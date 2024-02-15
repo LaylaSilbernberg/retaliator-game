@@ -1,5 +1,8 @@
 use godot::prelude::*;
 
+#[path = "enums/animations.rs"]
+mod animations;
+mod arm;
 #[path = "traits/damageable.rs"]
 mod damageable;
 mod global_state;
@@ -12,6 +15,7 @@ mod player;
 mod player_head;
 mod player_variables;
 mod prod_grunt;
+mod weapon_statistics;
 
 struct Retaliator;
 

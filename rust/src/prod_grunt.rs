@@ -1,5 +1,3 @@
-use std::ops::DerefMut;
-
 use ::godot::engine::CharacterBody3D;
 use ::godot::prelude::*;
 use godot::{
@@ -68,6 +66,14 @@ impl ProdGrunt {
             }
         }
     }
+    fn set_animation_to_default(&mut self, mut sprite: Gd<AnimatedSprite3D>) {
+        if let Some(animation) = sprite.get_sprite_frames() {
+            if sprite.get_frame() == animation.get_frame_count("hit".into()) - 1 {
+                sprite.set_animation("default".into());
+                sprite.play();
+            }
+        }
+    }
 }
 #[godot_api]
 impl ICharacterBody3D for ProdGrunt {
@@ -77,7 +83,17 @@ impl ICharacterBody3D for ProdGrunt {
         }
     }
     fn process(&mut self, _delta: f64) {
-        self.move_to_target();
+        let default = StringName::from("default");
+        let hit = StringName::from("hit");
+        if let Some(sprite) = self.get_sprite() {
+            if sprite.get_animation() == default {
+                self.move_to_target();
+            }
+            if sprite.get_animation() == hit {
+                self.set_animation_to_default(sprite);
+            }
+        }
+
         if let Some(health) = self.get_health() {
             if health.bind().get_health() <= 0 {
                 self.death();
@@ -85,9 +101,18 @@ impl ICharacterBody3D for ProdGrunt {
         }
     }
 }
+
 impl Health for ProdGrunt {
     fn get_health_component(&self) -> Gd<HealthComponent> {
         self.get_health().unwrap()
     }
 }
-impl Damageable for ProdGrunt {}
+impl Damageable for ProdGrunt {
+    fn damage(&mut self, damage: i32) {
+        if let Some(mut sprite) = self.get_sprite() {
+            self.get_health_component().bind_mut().take_damage(damage);
+            sprite.set_animation("hit".into());
+            sprite.play();
+        }
+    }
+}

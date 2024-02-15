@@ -1,0 +1,57 @@
+[gd_scene load_steps=3 format=3 uid="uid://ceflg1g77w674"]
+
+[ext_resource type="WeaponStatistics" uid="uid://cqrli71plud1q" path="res://scenes/weapons/shotgun/shotgun_stats.tres" id="1_8c00j"]
+[ext_resource type="SpriteFrames" uid="uid://cp581mxvydrg2" path="res://scenes/weapons/shotgun/shotgun.tres" id="1_ggtr5"]
+
+[node name="Shotgun" type="Gun" node_paths=PackedStringArray("gun_sprite", "gun_rays")]
+stats = ExtResource("1_8c00j")
+gun_sprite = NodePath("CanvasLayer/Control/ShotgunSprite")
+gun_rays = [NodePath("RayCast3D"), NodePath("RayCast3D2"), NodePath("RayCast3D3"), NodePath("RayCast3D4"), NodePath("RayCast3D5"), NodePath("RayCast3D6"), NodePath("RayCast3D7"), NodePath("RayCast3D8")]
+is_inaccurate = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="ShotgunSprite" type="AnimatedSprite2D" parent="CanvasLayer/Control"]
+position = Vector2(-237, 0)
+rotation = 3.14159
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("1_ggtr5")
+centered = false
+flip_h = true
+flip_v = true
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -20)
+
+[node name="RayCast3D2" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -20)
+
+[node name="RayCast3D3" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -20)
+
+[node name="RayCast3D4" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -20)
+
+[node name="RayCast3D5" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -20)
+
+[node name="RayCast3D6" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -20)
+
+[node name="RayCast3D7" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -20)
+
+[node name="RayCast3D8" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -20)

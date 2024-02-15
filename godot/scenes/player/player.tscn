@@ -1,6 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://nca1mu1fu74j"]
-
-[ext_resource type="PackedScene" uid="uid://cmao4hs30t7dj" path="res://scenes/weapons/pistol.tscn" id="2_u30wj"]
+[gd_scene load_steps=4 format=3 uid="uid://nca1mu1fu74j"]
 
 [sub_resource type="HealthComponent" id="HealthComponent_74d31"]
 
@@ -13,13 +11,18 @@ head = NodePath("PlayerHead")
 health = SubResource("HealthComponent_74d31")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="PlayerHead" type="PlayerHead" parent="." node_paths=PackedStringArray("camera")]
+[node name="PlayerHead" type="PlayerHead" parent="." node_paths=PackedStringArray("camera", "left_arm", "right_arm")]
 camera = NodePath("Camera3D")
+left_arm = NodePath("LeftArm")
+right_arm = NodePath("RightArm")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.49411, 0)
 
 [node name="Camera3D" type="Camera3D" parent="PlayerHead"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.78485, -0.397767)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.043849, -0.397767)
 
-[node name="Pistol" parent="PlayerHead" instance=ExtResource("2_u30wj")]
+[node name="LeftArm" type="Arm" parent="PlayerHead"]
+
+[node name="RightArm" type="Arm" parent="PlayerHead"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_e4rc8")
