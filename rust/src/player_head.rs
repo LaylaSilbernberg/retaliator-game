@@ -33,19 +33,52 @@ impl PlayerHead {
     pub fn get_right_current_gun(&self) -> usize {
         self.right_current_gun
     }
+    fn init_if_guns_are_different(&mut self, gun: Gd<Gun>, is_right: bool) {
+        if self.get_right_current_gun() != self.get_left_current_gun() {
+            self.init_gun(gun, is_right);
+        } else {
+            self.init_if_guns_are_the_same(gun, is_right)
+        }
+    }
+    fn init_if_guns_are_the_same(&mut self, gun: Gd<Gun>, is_right: bool) {
+        let stats = gun.bind().get_stats();
+        if let Some(stats) = stats {
+            if stats.bind().get_is_dual() {
+                self.init_gun(gun, is_right)
+            } else {
+                let right_after_increment = self.get_right_current_gun() + 1;
+                if is_right && right_after_increment < self.get_inventory().len() {
+                    self.right_current_gun += 1;
+                    if let Some(new_gun) =
+                        self.instantiate_gun(self.get_right_current_gun(), is_right)
+                    {
+                        self.init_gun(new_gun, is_right);
+                    }
+                }
+                if !is_right && self.get_left_current_gun().checked_sub(1).is_some() {
+                    self.left_current_gun -= 1;
+                    if let Some(new_gun) =
+                        self.instantiate_gun(self.get_right_current_gun(), is_right)
+                    {
+                        self.init_gun(new_gun, is_right);
+                    }
+                }
+            }
+        }
+    }
 
     fn scroll_weapons_increment(&mut self, is_right: bool) {
         let inventory_size = self.get_inventory().len();
         if is_right && (self.right_current_gun + 1) < inventory_size {
             self.right_current_gun += 1;
             if let Some(gun) = self.instantiate_gun(self.get_right_current_gun(), is_right) {
-                self.init_gun(gun, is_right);
+                self.init_if_guns_are_different(gun, is_right)
             }
         }
         if !is_right && (self.get_left_current_gun() + 1) < inventory_size {
             self.left_current_gun += 1;
             if let Some(gun) = self.instantiate_gun(self.get_left_current_gun(), is_right) {
-                self.init_gun(gun, is_right);
+                self.init_if_guns_are_different(gun, is_right)
             }
         }
     }
@@ -53,13 +86,13 @@ impl PlayerHead {
         if is_right && self.get_right_current_gun().checked_sub(1).is_some() {
             self.right_current_gun -= 1;
             if let Some(gun) = self.instantiate_gun(self.get_right_current_gun(), is_right) {
-                self.init_gun(gun, is_right)
+                self.init_if_guns_are_different(gun, is_right)
             }
         }
         if !is_right && self.get_left_current_gun().checked_sub(1).is_some() {
             self.left_current_gun -= 1;
             if let Some(gun) = self.instantiate_gun(self.get_left_current_gun(), is_right) {
-                self.init_gun(gun, is_right)
+                self.init_if_guns_are_different(gun, is_right)
             }
         }
     }
@@ -81,8 +114,9 @@ impl PlayerHead {
         } else {
             self.get_left_arm()
         } {
-            if let Some(mut old_gun) = arm.bind().get_gun() {
-                old_gun.queue_free();
+            let old_gun = arm.bind().get_gun();
+            if let Some(old_gun) = old_gun {
+                arm.remove_child(old_gun.upcast::<Node>())
             }
             arm.add_child(gun.upcast::<Node>());
             if let Some(gun) = arm.try_get_node_as::<Gun>(NodePath::from(name)) {
