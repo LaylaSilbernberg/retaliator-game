@@ -5,6 +5,7 @@ I'm a junior web-dev who has been into games since very young, and I also have a
 Follow my progress here!
 
 Here are some videos:
+
 [retaliator10.webm](https://github.com/LaylaSilbernberg/retaliator-game/assets/119636966/506811ae-2694-4231-91c1-6071183dca6a)
 
 [retaliator9.webm](https://github.com/LaylaSilbernberg/retaliator-game/assets/119636966/45f3566b-3cf7-4b28-8004-4204c0dc89c7)
