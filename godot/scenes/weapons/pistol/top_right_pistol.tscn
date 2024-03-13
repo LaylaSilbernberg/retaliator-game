@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://cxlc10bfpvg7q"]
+
+[ext_resource type="WeaponStatistics" uid="uid://b1p6pb7d3cmh0" path="res://scenes/weapons/pistol/pistol_stats.tres" id="1_vfice"]
+[ext_resource type="SpriteFrames" uid="uid://2ldtwkyxynhm" path="res://scenes/weapons/pistol/pistol.tres" id="2_u3ohd"]
+
+[node name="Pistol" type="Gun" node_paths=PackedStringArray("gun_sprite", "gun_rays")]
+stats = ExtResource("1_vfice")
+gun_sprite = NodePath("CanvasLayer/Control/PistolSprite")
+gun_rays = [NodePath("RayCast3D")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="PistolSprite" type="AnimatedSprite2D" parent="CanvasLayer/Control"]
+position = Vector2(-237, 230)
+rotation = 3.14159
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("2_u3ohd")
+animation = &"shoot"
+frame = 3
+frame_progress = 1.0
+centered = false
+flip_h = true
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -20)

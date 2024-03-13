@@ -382,7 +382,7 @@ max_health = 30
 
 [sub_resource type="HealthComponent" id="HealthComponent_ybg7s"]
 
-[node name="TestLevel" type="Node3D"]
+[node name="Level" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -5.96001, 1)
 script = ExtResource("1_akxtu")
 map_file = "/home/layla/Documents/personal-projects/retaliator/godot/textures/testlevel.map"

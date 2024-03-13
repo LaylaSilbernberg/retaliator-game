@@ -1,7 +1,6 @@
 use ::godot::prelude::*;
 
 use godot::engine::input::MouseMode;
-use godot::engine::utilities::{clampf, deg_to_rad};
 use godot::engine::{CharacterBody3D, ICharacterBody3D, InputEvent, InputEventMouseMotion};
 use godot::obj::WithBaseField;
 
@@ -32,18 +31,9 @@ impl ICharacterBody3D for Player {
             .bind()
             .get_mouse_sensitivity();
         if let Ok(event_motion) = event.try_cast::<InputEventMouseMotion>() {
-            let mut head = self.get_head().expect("Head must be initialised");
-            let mut camera = head
-                .bind_mut()
-                .get_camera()
-                .expect("Camera must be initialised");
-            head.rotate_y(-event_motion.get_relative().x * sensitivity);
-            camera.rotate_x(-event_motion.get_relative().y * sensitivity);
-            camera.get_rotation().x = clampf(
-                camera.get_rotation().x as f64,
-                deg_to_rad(-40.0),
-                deg_to_rad(60.0),
-            ) as f32;
+            if let Some(mut head) = self.get_head() {
+                head.rotate_y(-event_motion.get_relative().x * sensitivity);
+            }
         }
     }
 

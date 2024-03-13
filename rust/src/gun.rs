@@ -1,7 +1,9 @@
 use core::f32;
 
 use godot::engine::utilities::randf_range;
-use godot::engine::{AnimatedSprite2D, Control, Node3D, RayCast3D};
+use godot::engine::{
+    AnimatedSprite2D, Control, CpuParticles3D, Node3D, NodeExt, RayCast3D, ResourcePreloader,
+};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 
@@ -11,9 +13,6 @@ use crate::weapon_statistics::WeaponStatistics;
 #[derive(GodotClass)]
 #[class(init, base = Node3D)]
 pub struct Gun {
-    #[var]
-    #[init(default = 4)]
-    last_frame: i32,
     #[var]
     #[init(default = true)]
     can_shoot: bool,
@@ -76,11 +75,24 @@ impl Gun {
     }
 
     fn check_hit(&mut self) {
+        let mut root_node = self
+            .base()
+            .get_tree()
+            .expect("tree needs to exist")
+            .get_current_scene()
+            .expect("current scene must be initialised");
         for mut ray in self.get_gun_rays().iter_shared() {
             if let Some(collider) = ray.get_collider() {
                 let mut actor = Damageables::try_cast_damageable(collider);
-                if let Some(stats) = self.get_stats() {
-                    actor.do_damage(stats.bind().get_damage());
+                if actor.is_some() {
+                    if let Some(stats) = self.get_stats() {
+                        actor.do_damage(stats.bind().get_damage());
+                        let mut blood = load::<PackedScene>("res://scenes/particles/blood.tscn")
+                            .instantiate_as::<CpuParticles3D>();
+                        root_node.add_child(blood.upcast::<Node>());
+                        blood = root_node.get_node_as::<CpuParticles3D>("Blood");
+                        blood.set_global_position(ray.get_collision_point());
+                    }
                 }
             }
             if self.get_is_inaccurate() {

@@ -11,18 +11,27 @@ head = NodePath("PlayerHead")
 health = SubResource("HealthComponent_74d31")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="PlayerHead" type="PlayerHead" parent="." node_paths=PackedStringArray("camera", "left_arm", "right_arm")]
-camera = NodePath("Camera3D")
-left_arm = NodePath("LeftArm")
-right_arm = NodePath("RightArm")
+[node name="PlayerHead" type="PlayerHead" parent="." node_paths=PackedStringArray("camera", "left_arm", "second_left_arm", "right_arm", "pivot", "second_right_arm")]
+camera = NodePath("Pivot/Camera3D")
+left_arm = NodePath("Pivot/LeftArm")
+second_left_arm = NodePath("Pivot/SecondLeftArm")
+right_arm = NodePath("Pivot/RightArm")
+pivot = NodePath("Pivot")
+second_right_arm = NodePath("Pivot/SecondRightArm")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.49411, 0)
 
-[node name="Camera3D" type="Camera3D" parent="PlayerHead"]
+[node name="Pivot" type="Node3D" parent="PlayerHead"]
+
+[node name="Camera3D" type="Camera3D" parent="PlayerHead/Pivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.043849, -0.397767)
 
-[node name="LeftArm" type="Arm" parent="PlayerHead"]
+[node name="LeftArm" type="Arm" parent="PlayerHead/Pivot"]
 
-[node name="RightArm" type="Arm" parent="PlayerHead"]
+[node name="SecondLeftArm" type="Arm" parent="PlayerHead/Pivot"]
+
+[node name="SecondRightArm" type="Arm" parent="PlayerHead/Pivot"]
+
+[node name="RightArm" type="Arm" parent="PlayerHead/Pivot"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_e4rc8")
