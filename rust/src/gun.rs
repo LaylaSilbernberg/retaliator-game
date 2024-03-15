@@ -1,9 +1,7 @@
 use core::f32;
 
 use godot::engine::utilities::randf_range;
-use godot::engine::{
-    AnimatedSprite2D, Control, CpuParticles3D, Node3D, NodeExt, RayCast3D, ResourcePreloader,
-};
+use godot::engine::{AnimatedSprite2D, Control, CpuParticles3D, Node3D, NodeExt, RayCast3D};
 use godot::obj::WithBaseField;
 use godot::prelude::*;
 

@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::usize;
 
 use crate::arm::Arm;
@@ -24,8 +25,7 @@ pub struct PlayerHead {
     pivot: Option<Gd<Node3D>>,
     #[export]
     second_right_arm: Option<Gd<Arm>>,
-    #[export]
-    inventory: Array<Array<Gd<PackedScene>>>,
+    inventory: HashMap<usize, Vec<Gd<PackedScene>>>,
     left_current_gun: usize,
     right_current_gun: usize,
 }
@@ -62,19 +62,17 @@ impl PlayerHead {
                 self.init_gun(gun, is_right, false)
             } else {
                 let right_after_increment = self.get_right_current_gun() + 1;
-                if is_right && right_after_increment < self.get_inventory().len() {
+                if is_right && right_after_increment <= self.inventory.len() {
                     self.right_current_gun += 1;
-                    if let Some(new_gun) =
-                        self.instantiate_gun(self.get_right_current_gun(), is_right, false)
-                    {
+                    let index = self.right_current_gun;
+                    if let Some(new_gun) = self.instantiate_gun(&index, is_right, false) {
                         self.init_gun(new_gun, is_right, false);
                     }
                 }
-                if !is_right && self.get_left_current_gun().checked_sub(1).is_some() {
+                if !is_right && self.get_left_current_gun().checked_sub(2).is_some() {
                     self.left_current_gun -= 1;
-                    if let Some(new_gun) =
-                        self.instantiate_gun(self.get_right_current_gun(), is_right, false)
-                    {
+                    let index = self.left_current_gun;
+                    if let Some(new_gun) = self.instantiate_gun(&index, is_right, false) {
                         self.init_gun(new_gun, is_right, false);
                     }
                 }
@@ -108,37 +106,41 @@ impl PlayerHead {
     }
 
     fn scroll_weapons_increment(&mut self, is_right: bool) {
-        let inventory_size = self.get_inventory().len();
-        if is_right && (self.right_current_gun + 1) < inventory_size {
+        let inventory_size = self.inventory.len();
+        if is_right && (self.right_current_gun + 1) <= inventory_size {
             self.right_current_gun += 1;
-            if let Some(gun) = self.instantiate_gun(self.get_right_current_gun(), is_right, false) {
+            let index = self.right_current_gun;
+            if let Some(gun) = self.instantiate_gun(&index, is_right, false) {
                 self.init_if_guns_are_different(gun, is_right)
             }
         }
-        if !is_right && (self.get_left_current_gun() + 1) < inventory_size {
+        if !is_right && (self.get_left_current_gun() + 1) <= inventory_size {
             self.left_current_gun += 1;
-            if let Some(gun) = self.instantiate_gun(self.get_left_current_gun(), is_right, false) {
+            let index = self.left_current_gun;
+            if let Some(gun) = self.instantiate_gun(&index, is_right, false) {
                 self.init_if_guns_are_different(gun, is_right)
             }
         }
     }
     fn scroll_weapons_decrement(&mut self, is_right: bool) {
-        if is_right && self.get_right_current_gun().checked_sub(1).is_some() {
+        if is_right && self.get_right_current_gun().checked_sub(2).is_some() {
             self.right_current_gun -= 1;
-            if let Some(gun) = self.instantiate_gun(self.get_right_current_gun(), is_right, false) {
+            let index = self.right_current_gun;
+            if let Some(gun) = self.instantiate_gun(&index, is_right, false) {
                 self.init_if_guns_are_different(gun, is_right)
             }
         }
-        if !is_right && self.get_left_current_gun().checked_sub(1).is_some() {
+        if !is_right && self.get_left_current_gun().checked_sub(2).is_some() {
             self.left_current_gun -= 1;
-            if let Some(gun) = self.instantiate_gun(self.get_left_current_gun(), is_right, false) {
+            let index = self.left_current_gun;
+            if let Some(gun) = self.instantiate_gun(&index, is_right, false) {
                 self.init_if_guns_are_different(gun, is_right)
             }
         }
     }
     fn instantiate_gun(
         &mut self,
-        gun_index: usize,
+        gun_index: &usize,
         is_right: bool,
         is_quadruple: bool,
     ) -> Option<Gd<Gun>> {
@@ -146,9 +148,11 @@ impl PlayerHead {
         if is_quadruple {
             gun_orientation += 2;
         }
-        self.get_inventory()
+        self.inventory
             .get(gun_index)
+            .expect("No array here")
             .get(gun_orientation)
+            .expect("Vec is empty")
             .try_instantiate_as::<Gun>()
     }
 
@@ -189,15 +193,12 @@ impl PlayerHead {
                     self.get_second_left_arm()
                 } {
                     let mut name: StringName = StringName::default();
-                    if let Some(second_gun) = self.instantiate_gun(
-                        if is_right {
-                            self.get_right_current_gun()
-                        } else {
-                            self.get_left_current_gun()
-                        },
-                        is_right,
-                        true,
-                    ) {
+                    let actual_index = if is_right {
+                        self.right_current_gun
+                    } else {
+                        self.left_current_gun
+                    };
+                    if let Some(second_gun) = self.instantiate_gun(&actual_index, is_right, true) {
                         name = second_gun.get_name();
                         second_arm.add_child(second_gun.upcast::<Node>());
                     }
@@ -211,12 +212,29 @@ impl PlayerHead {
         }
     }
     fn init_arms(&mut self) {
-        if self.get_inventory().len() > 1 {
-            if let Some(right_gun) = self.instantiate_gun(0, true, false) {
+        if self.inventory.len() > 1 {
+            if let Some(right_gun) = self.instantiate_gun(&1, true, false) {
                 self.init_gun(right_gun, true, false);
             }
-            if let Some(left_gun) = self.instantiate_gun(1, false, false) {
+            if let Some(left_gun) = self.instantiate_gun(&2, false, false) {
                 self.init_gun(left_gun, false, false);
+            }
+        }
+    }
+    fn instatiate_gun_by_index(&mut self, index: &usize, is_right: bool) {
+        let checked_number = if is_right {
+            self.right_current_gun
+        } else {
+            self.left_current_gun
+        };
+        if self.inventory.get(index).is_some() && index != &checked_number {
+            if is_right {
+                self.right_current_gun = *index;
+            } else {
+                self.left_current_gun = *index;
+            }
+            if let Some(gun) = self.instantiate_gun(index, is_right, false) {
+                self.init_if_guns_are_different(gun, is_right)
             }
         }
     }
@@ -224,29 +242,19 @@ impl PlayerHead {
 #[godot_api]
 impl INode3D for PlayerHead {
     fn init(base: Base<Node3D>) -> Self {
-        let mut pistol: Array<Gd<PackedScene>> = Array::new();
-        pistol.push(load::<PackedScene>(
-            "res://scenes/weapons/pistol/right_pistol.tscn",
-        ));
-        pistol.push(load::<PackedScene>(
-            "res://scenes/weapons/pistol/left_pistol.tscn",
-        ));
-        pistol.push(load::<PackedScene>(
-            "res://scenes/weapons/pistol/top_right_pistol.tscn",
-        ));
-        pistol.push(load::<PackedScene>(
-            "res://scenes/weapons/pistol/top_left_pistol.tscn",
-        ));
-        let mut shotgun: Array<Gd<PackedScene>> = Array::new();
-        shotgun.push(load::<PackedScene>(
-            "res://scenes/weapons/shotgun/right_shotgun.tscn",
-        ));
-        shotgun.push(load::<PackedScene>(
-            "res://scenes/weapons/shotgun/left_shotgun.tscn",
-        ));
-        let mut packed_scene_array = Array::new();
-        packed_scene_array.push(pistol);
-        packed_scene_array.push(shotgun);
+        let pistol: Vec<Gd<PackedScene>> = vec![
+            load::<PackedScene>("res://scenes/weapons/pistol/right_pistol.tscn"),
+            load::<PackedScene>("res://scenes/weapons/pistol/left_pistol.tscn"),
+            load::<PackedScene>("res://scenes/weapons/pistol/top_right_pistol.tscn"),
+            load::<PackedScene>("res://scenes/weapons/pistol/top_left_pistol.tscn"),
+        ];
+        let shotgun: Vec<Gd<PackedScene>> = vec![
+            load::<PackedScene>("res://scenes/weapons/shotgun/right_shotgun.tscn"),
+            load::<PackedScene>("res://scenes/weapons/shotgun/left_shotgun.tscn"),
+        ];
+        let mut packed_scene_map: HashMap<usize, Vec<Gd<PackedScene>>> = HashMap::new();
+        packed_scene_map.insert(1, pistol);
+        packed_scene_map.insert(2, shotgun);
         PlayerHead {
             camera: Option::None,
             base,
@@ -255,9 +263,9 @@ impl INode3D for PlayerHead {
             right_arm: Option::None,
             pivot: Option::None,
             second_right_arm: Option::None,
-            inventory: packed_scene_array,
-            left_current_gun: 1,
-            right_current_gun: 0,
+            inventory: packed_scene_map,
+            left_current_gun: 2,
+            right_current_gun: 1,
         }
     }
     fn process(&mut self, _delta: f64) {
@@ -320,6 +328,26 @@ impl INode3D for PlayerHead {
                     deg_to_rad(60.0),
                 ) as f32;
             }
+        }
+    }
+    fn input(&mut self, input_event: Gd<InputEvent>) {
+        if input_event.is_action_pressed("right_weapon_1".into()) {
+            self.instatiate_gun_by_index(&1, true)
+        }
+        if input_event.is_action_pressed("right_weapon_2".into()) {
+            self.instatiate_gun_by_index(&2, true)
+        }
+        if input_event.is_action_pressed("right_weapon_3".into()) {
+            self.instatiate_gun_by_index(&3, true)
+        }
+        if input_event.is_action_pressed("left_weapon_1".into()) {
+            self.instatiate_gun_by_index(&1, false)
+        }
+        if input_event.is_action_pressed("left_weapon_2".into()) {
+            self.instatiate_gun_by_index(&2, false)
+        }
+        if input_event.is_action_pressed("left_weapon_3".into()) {
+            self.instatiate_gun_by_index(&3, false)
         }
     }
 }
