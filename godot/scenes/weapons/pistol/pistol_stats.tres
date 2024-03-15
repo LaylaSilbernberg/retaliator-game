@@ -5,3 +5,5 @@ damage = 8
 ammo_pool = 144
 max_ammo = 150
 is_dual = true
+is_triple = true
+is_quadruple = true
