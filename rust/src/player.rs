@@ -30,10 +30,11 @@ impl ICharacterBody3D for Player {
             .get_node_as::<PlayerVariables>("/root/PlayerVars")
             .bind()
             .get_mouse_sensitivity();
-        if let Ok(event_motion) = event.try_cast::<InputEventMouseMotion>() {
-            if let Some(mut head) = self.get_head() {
-                head.rotate_y(-event_motion.get_relative().x * sensitivity);
-            }
+        let Ok(event_motion) = event.try_cast::<InputEventMouseMotion>() else {
+            return;
+        };
+        if let Some(mut head) = self.get_head() {
+            head.rotate_y(-event_motion.get_relative().x * sensitivity);
         }
     }
 
@@ -54,22 +55,23 @@ impl ICharacterBody3D for Player {
             "move_forward".into(),
             "move_back".into(),
         );
-        if let Some(mut head) = self.get_head() {
-            let direction = head.bind_mut().get_head_transform_basis()
-                * Vector3 {
-                    x: input_dir.x,
-                    y: 0.0,
-                    z: input_dir.y,
-                };
-            player_velocity.x = direction.x * speed;
-            player_velocity.z = direction.z * speed;
-            self.base_mut().set_velocity(player_velocity);
-            self.base_mut().move_and_slide();
-        }
+        let Some(mut head) = self.get_head() else {
+            return;
+        };
+        let direction = head.bind_mut().get_head_transform_basis()
+            * Vector3 {
+                x: input_dir.x,
+                y: 0.0,
+                z: input_dir.y,
+            };
+        player_velocity.x = direction.x * speed;
+        player_velocity.z = direction.z * speed;
+        self.base_mut().set_velocity(player_velocity);
+        self.base_mut().move_and_slide();
     }
 }
 impl Health for Player {
     fn get_health_component(&self) -> Gd<HealthComponent> {
-        self.get_health().unwrap()
+        self.get_health().expect("health component undefined.")
     }
 }

@@ -40,58 +40,66 @@ impl INode3D for Gun {
         }
     }
     fn process(&mut self, _delta: f64) {
-        if let Some(gun_sprite) = self.get_gun_sprite() {
-            if let Some(sprite_frames) = gun_sprite.get_sprite_frames() {
-                if !self.can_shoot
-                    && gun_sprite.get_frame() == sprite_frames.get_frame_count("shoot".into()) - 1
-                {
-                    self.finish_shooting();
-                }
-            }
+        let Some(gun_sprite) = self.get_gun_sprite() else {
+            return;
+        };
+        let Some(sprite_frames) = gun_sprite.get_sprite_frames() else {
+            return;
+        };
+        if !self.can_shoot
+            && gun_sprite.get_frame() == sprite_frames.get_frame_count("shoot".into()) - 1
+        {
+            self.finish_shooting();
         }
     }
 }
 #[godot_api]
 impl Gun {
     pub fn shoot(&mut self) {
-        if let Some(mut gun_sprite) = self.get_gun_sprite() {
-            if self.get_can_shoot() {
-                gun_sprite.set_animation("shoot".into());
-                gun_sprite.play();
-                self.flash();
-                self.check_hit();
-                self.can_shoot = false;
-            }
+        let Some(mut gun_sprite) = self.get_gun_sprite() else {
+            return;
+        };
+        if self.get_can_shoot() {
+            gun_sprite.set_animation("shoot".into());
+            gun_sprite.play();
+            self.flash();
+            self.check_hit();
+            self.can_shoot = false;
         }
     }
     fn finish_shooting(&mut self) {
-        if let Some(mut gun_sprite) = self.get_gun_sprite() {
-            gun_sprite.set_animation("default".into());
-            gun_sprite.play();
-            self.can_shoot = true;
-        }
+        let Some(mut gun_sprite) = self.get_gun_sprite() else {
+            return;
+        };
+        gun_sprite.set_animation("default".into());
+        gun_sprite.play();
+        self.can_shoot = true;
     }
 
     fn check_hit(&mut self) {
-        let mut root_node = self
+        let Some(mut root_node) = self
             .base()
             .get_tree()
             .expect("tree needs to exist")
             .get_current_scene()
-            .expect("current scene must be initialised");
+        else {
+            return;
+        };
         for mut ray in self.get_gun_rays().iter_shared() {
-            if let Some(collider) = ray.get_collider() {
-                let mut actor = Damageables::try_cast_damageable(collider);
-                if actor.is_some() {
-                    if let Some(stats) = self.get_stats() {
-                        actor.do_damage(stats.bind().get_damage());
-                        let mut blood = load::<PackedScene>("res://scenes/particles/blood.tscn")
-                            .instantiate_as::<CpuParticles3D>();
-                        root_node.add_child(blood.upcast::<Node>());
-                        blood = root_node.get_node_as::<CpuParticles3D>("Blood");
-                        blood.set_global_position(ray.get_collision_point());
-                    }
-                }
+            let Some(collider) = ray.get_collider() else {
+                return;
+            };
+            let mut actor = Damageables::try_cast_damageable(collider);
+            if actor.is_some() {
+                let Some(stats) = self.get_stats() else {
+                    return;
+                };
+                actor.do_damage(stats.bind().get_damage());
+                let mut blood = load::<PackedScene>("res://scenes/particles/blood.tscn")
+                    .instantiate_as::<CpuParticles3D>();
+                root_node.add_child(blood.upcast::<Node>());
+                blood = root_node.get_node_as::<CpuParticles3D>("Blood");
+                blood.set_global_position(ray.get_collision_point());
             }
             if self.get_is_inaccurate() {
                 let mut rotation = Vector3::ZERO;
@@ -103,10 +111,12 @@ impl Gun {
     }
 
     fn flash(&mut self) {
-        if let Some(scene) =
+        let Some(scene) =
             load::<PackedScene>("res://scenes/components/muzzle_flash.tscn").instantiate()
-        {
-            self.base_mut().add_child(scene);
-        }
+        else {
+            return;
+        };
+
+        self.base_mut().add_child(scene);
     }
 }

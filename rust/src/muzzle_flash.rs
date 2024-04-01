@@ -12,15 +12,13 @@ pub struct MuzzleFlash {
 #[godot_api]
 impl IOmniLight3D for MuzzleFlash {
     fn ready(&mut self) {
-        if let Some(mut timer) = self.get_timer() {
-            timer.connect(
-                "timeout".into(),
-                Callable::from_object_method(
-                    &self.base().to_godot(),
-                    StringName::from("on_timeout"),
-                ),
-            );
-        }
+        let Some(mut timer) = self.get_timer() else {
+            return;
+        };
+        timer.connect(
+            "timeout".into(),
+            Callable::from_object_method(&self.base().to_godot(), StringName::from("on_timeout")),
+        );
     }
 }
 #[godot_api]
